@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College of the Immaculate Conception – Game Development</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700;800&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Reset & Base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple:   #7a16d8;
+      --purple-dk:#5a0fa0;
+      --cyan:     #00ffcc;
+      --white:    #ffffff;
+      --off-white:#ddd;
+      --dark:     #000000;
+      --nav-h:    72px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Oxanium', sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+
+    /* ─── HEADER ─── */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+      height: var(--nav-h);
+      background: linear-gradient(135deg, #0a0a2a, #1c1c4d);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      overflow: hidden;
+      box-shadow: 0 2px 20px rgba(122,22,216,0.4);
+    }
+
+    /* comet */
+    .header::after {
+      content: "";
+      position: absolute;
+      top: 40%;
+      left: -300px;
+      width: 300px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(0,255,204,0.7));
+      transform: rotate(8deg);
+      animation: comet 7s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes comet {
+      0%   { left: -300px; opacity: 0; }
+      20%  { opacity: 1; }
+      100% { left: 115%; opacity: 0; }
+    }
+
+    .logo {
+      flex-shrink: 0;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: url('cic-logo.png') no-repeat center/cover;
+      border: 2px solid var(--purple);
+      z-index: 1;
+    }
+
+    .header-text {
+      flex: 1;
+      text-align: center;
+      z-index: 1;
+      padding: 0 12px;
+    }
+    .header-text h1 {
+      font-size: clamp(14px, 2.8vw, 36px);
+      font-weight: 800;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .header-text p {
+      font-size: clamp(10px, 1.6vw, 20px);
+      font-style: italic;
+      color: var(--off-white);
+      margin-top: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Hamburger (mobile only) */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 2;
+      flex-shrink: 0;
+    }
+    .hamburger span {
+      width: 26px;
+      height: 2px;
+      background: #fff;
+      transition: all 0.3s;
+    }
+
+    /* ─── HERO / PROGRAM SECTION ─── */
+    .program-section {
+      width: 100%;
+      min-height: 100svh;
+      background: url('pangalawa2.png') no-repeat center center/cover;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: clamp(32px, 6vw, 80px) clamp(20px, 6vw, 80px);
+      position: relative;
+    }
+    .program-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+    }
+    .program-section > * { position: relative; z-index: 1; }
+
+    .program-section h2 {
+      font-size: clamp(28px, 5vw, 64px);
+      font-weight: 800;
+      margin-bottom: 6px;
+      text-shadow: 4px 4px 14px rgba(0,0,0,0.9);
+    }
+    .program-section .subtitle {
+      font-size: clamp(16px, 2.8vw, 40px);
+      font-style: italic;
+      color: #ddd;
+      margin-bottom: clamp(24px, 4vw, 80px);
+      text-shadow: 4px 4px 14px rgba(0,0,0,0.9);
+    }
+
+    .program-list {
+      list-style: none;
+      margin-bottom: clamp(24px, 4vw, 60px);
+    }
+    .program-list li {
+      font-size: clamp(16px, 2.4vw, 30px);
+      padding: 6px 0 6px 28px;
+      position: relative;
+      text-shadow: 3px 3px 10px rgba(0,0,0,0.9);
+    }
+    .program-list li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      color: var(--cyan);
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 850px;
+    }
+    .cta-btn {
+      background: var(--purple);
+      color: #fff;
+      padding: clamp(12px, 2vw, 20px) clamp(18px, 3vw, 40px);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: clamp(13px, 1.8vw, 18px);
+      border-radius: 6px;
+      transition: background 0.3s ease, color 0.3s ease;
+      white-space: nowrap;
+    }
+    .cta-btn:hover { background: var(--cyan); color: #000; }
+
+    /* ─── WHY SECTION ─── */
+    .why-section {
+      width: 100%;
+      min-height: 100svh;
+      background: url('pangatlo3.png') no-repeat center center/cover;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: clamp(32px, 6vw, 80px) clamp(20px, 6vw, 80px);
+      position: relative;
+    }
+    .why-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+    }
+    .why-section > * { position: relative; z-index: 1; }
+
+    .why-section h2 {
+      font-size: clamp(28px, 5vw, 64px);
+      font-weight: 800;
+      margin-bottom: 12px;
+      text-shadow: 4px 4px 14px rgba(0,0,0,0.9);
+    }
+    .why-section .subtitle {
+      font-size: clamp(15px, 2.4vw, 36px);
+      font-style: italic;
+      color: #ddd;
+      max-width: 700px;
+      margin-bottom: clamp(24px, 4vw, 80px);
+      text-shadow: 4px 4px 14px rgba(0,0,0,0.9);
+    }
+    .why-list {
+      list-style: none;
+      margin-bottom: clamp(28px, 5vw, 80px);
+    }
+    .why-list li {
+      font-size: clamp(16px, 2.4vw, 30px);
+      padding: 6px 0 6px 28px;
+      position: relative;
+      text-shadow: 3px 3px 10px rgba(0,0,0,0.9);
+    }
+    .why-list li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      color: var(--cyan);
+    }
+
+    /* ─── GAMES SECTION ─── */
+    .games-section {
+      width: 100%;
+      background: url('una1.png') no-repeat center center/cover;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: clamp(40px, 6vw, 80px) clamp(16px, 4vw, 60px);
+      position: relative;
+    }
+    .games-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+    }
+    .games-section > * { position: relative; z-index: 1; }
+
+    .games-section h2 {
+      font-size: clamp(28px, 5vw, 64px);
+      font-weight: 800;
+      margin-bottom: clamp(24px, 4vw, 50px);
+      text-shadow: 4px 4px 14px rgba(0,0,0,1);
+    }
+
+    .games-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(10px, 3vw, 40px);
+      width: 100%;
+    }
+
+    .arrow {
+      font-size: clamp(24px, 4vw, 48px);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: color 0.3s;
+      user-select: none;
+    }
+    .arrow:hover { color: var(--cyan); }
+
+    .game-icons {
+      display: flex;
+      gap: clamp(10px, 2.5vw, 40px);
+      flex-wrap: nowrap;
+      overflow: hidden;
+      justify-content: center;
+    }
+
+    .game-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .game-icon {
+      width: clamp(60px, 10vw, 120px);
+      height: clamp(60px, 10vw, 120px);
+      border-radius: 10px;
+      box-shadow: 0 0 16px rgba(0,0,0,0.8);
+      object-fit: cover;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .game-icon:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 22px rgba(0,255,204,0.8);
+    }
+
+    .game-label {
+      font-size: clamp(9px, 1.4vw, 14px);
+      color: #ccc;
+    }
+
+    /* ─── CREATORS SECTION ─── */
+    .creators-section {
+      width: 100%;
+      min-height: 70svh;
+      display: flex;
+      flex-direction: row;
+    }
+
+    .creators-left {
+      flex: 1;
+      background: url('apat4.png') no-repeat center center/cover;
+      padding: clamp(32px, 6vw, 80px) clamp(20px, 5vw, 60px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+    .creators-left::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+    }
+    .creators-left > * { position: relative; z-index: 1; }
+
+    .creators-left h2 {
+      font-size: clamp(22px, 4vw, 60px);
+      font-weight: 800;
+      margin-bottom: 16px;
+      text-shadow: 3px 3px 8px rgba(0,0,0,0.9);
+    }
+    .creators-left p {
+      font-size: clamp(14px, 2vw, 28px);
+      color: #ddd;
+      max-width: 480px;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+      line-height: 1.6;
+    }
+
+    .creators-right {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background: #000;
+      min-height: 280px;
+    }
+    .creators-right img,
+    .creators-right video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ─── FOOTER ─── */
+    .cic-page {
+      width: 100%;
+      min-height: 700px;
+      background: url('lima5.png') no-repeat center center/cover;
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+    .cic-page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(10,0,30,0.55);
+    }
+    .cic-page > * { position: relative; z-index: 1; }
+
+    /* vertical divider */
+    .cic-divider {
+      background: rgba(255,255,255,0.25);
+      width: 1px;
+      align-self: stretch;
+    }
+
+    /* LEFT COLUMN */
+    .cic-left {
+      display: grid;
+      grid-template-rows: 1fr auto auto;
+      grid-template-columns: auto 1fr;
+      gap: 0;
+      padding: clamp(20px,3vw,40px);
+      align-items: center;
+    }
+
+    .cic-seal {
+      grid-row: 1 / 2;
+      grid-column: 1 / 2;
+      width: clamp(100px, 18vw, 220px);
+      height: clamp(100px, 18vw, 220px);
+      background: url('cic-logo.png') no-repeat center center/contain;
+    }
+
+    .cic-school-name {
+      grid-row: 1 / 2;
+      grid-column: 2 / 3;
+      font-size: clamp(13px, 1.8vw, 22px);
+      font-weight: 700;
+      padding-left: clamp(10px, 2vw, 24px);
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+      align-self: center;
+    }
+
+    .cic-social {
+      grid-row: 2 / 3;
+      grid-column: 1 / 3;
+      display: flex;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .cic-social a {
+      width: clamp(32px, 5vw, 48px);
+      height: clamp(32px, 5vw, 48px);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .cic-social a:hover { transform: scale(1.1); }
+    .cic-social img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* facebook pill */
+    .fb-pill {
+      background: #1877F2;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(32px, 5vw, 48px);
+      height: clamp(32px, 5vw, 48px);
+      color: #fff;
+      font-weight: 700;
+      font-size: clamp(14px, 2vw, 22px);
+      text-decoration: none;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .fb-pill:hover { transform: scale(1.1); }
+
+    .yt-pill {
+      background: #FF0000;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(32px, 5vw, 48px);
+      height: clamp(32px, 5vw, 48px);
+      color: #fff;
+      font-size: clamp(14px, 2vw, 20px);
+      text-decoration: none;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .yt-pill:hover { transform: scale(1.1); }
+
+    .cic-copy {
+      grid-row: 3 / 4;
+      grid-column: 1 / 3;
+      font-size: clamp(11px, 1.4vw, 14px);
+      color: #bbb;
+      margin-top: 14px;
+    }
+
+    /* RIGHT COLUMN — two sub-rows split by a horizontal line */
+    .cic-right {
+      display: grid;
+      grid-template-rows: 1fr 1px 1fr;
+    }
+
+    .cic-right-top {
+      padding: clamp(16px,2.5vw,32px) clamp(20px,3vw,40px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .cic-right-top h2 {
+      font-size: clamp(14px, 2vw, 24px);
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+    }
+    .cic-right-top p {
+      font-size: clamp(12px, 1.6vw, 18px);
+      line-height: 1.55;
+      color: #ddd;
+    }
+
+    .cic-h-divider {
+      background: rgba(255,255,255,0.25);
+      height: 1px;
+    }
+
+    .cic-right-bottom {
+      padding: clamp(16px,2.5vw,32px) clamp(20px,3vw,40px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .cic-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+    .cic-links a {
+      color: #fff;
+      text-decoration: none;
+      font-size: clamp(12px, 1.6vw, 18px);
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .cic-links a:hover { color: var(--cyan); }
+
+    .cic-btn {
+      background: rgba(100,100,130,0.5);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: clamp(10px,1.5vw,14px) clamp(16px,2.5vw,28px);
+      font-size: clamp(12px,1.5vw,16px);
+      font-family: 'Oxanium', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: background 0.3s, color 0.3s;
+      white-space: nowrap;
+      align-self: flex-end;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cic-btn:hover { background: var(--cyan); color: #000; border-color: var(--cyan); }
+    .cic-btn::before { content: "💬"; font-size: 14px; }
+
+    /* ════════════════════════════
+       MOBILE  (≤ 768 px)
+    ════════════════════════════ */
+    @media (max-width: 768px) {
+
+      /* Header */
+      .header { padding: 0 16px; }
+      .header-text h1 { font-size: clamp(11px, 3.8vw, 20px); }
+      .header-text p  { display: none; }
+
+      /* Creators split → stack */
+      .creators-section {
+        flex-direction: column;
+        min-height: auto;
+      }
+      .creators-right { min-height: 260px; }
+
+      /* Footer split → stack */
+      .cic-page {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1px auto;
+      }
+      .cic-divider {
+        width: 100%;
+        height: 1px;
+      }
+      .cic-left {
+        grid-template-columns: auto 1fr;
+      }
+
+      /* games carousel: keep 3 visible */
+      .game-icons { gap: 8px; }
+      .game-icon {
+        width: clamp(56px, 18vw, 90px);
+        height: clamp(56px, 18vw, 90px);
+      }
+    }
+
+    /* ════════════════════════════
+       VERY SMALL  (≤ 420 px)
+    ════════════════════════════ */
+    @media (max-width: 420px) {
+      .game-icons .game-item:nth-child(n+4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <div class="logo"></div>
+    <div class="header-text">
+      <h1>College of the Immaculate Conception</h1>
+      <p>Future Game Development Starts Here</p>
+    </div>
+  </header>
+
+  <!-- ── PROGRAM SECTION ── -->
+  <section class="program-section">
+    <h2>Learn Game Development at CIC</h2>
+    <p class="subtitle"><strong>From Players to Game Creators.</strong></p>
+    <ul class="program-list">
+      <li>Unity Game Development</li>
+      <li>Game Design Fundamentals</li>
+      <li>Programming Basics</li>
+    </ul>
+    <div class="btn-group">
+      <a href="#" class="cta-btn">🔍 Explore Program</a>
+      <a href="#" class="cta-btn">✅ Enroll Now</a>
+    </div>
+  </section>
+
+  <!-- ── WHY SECTION ── -->
+  <section class="why-section">
+    <h2>WHY CHOOSE CIC?</h2>
+    <p class="subtitle">CIC is a creative learning space where students develop skills in technology, design, and innovation.</p>
+    <ul class="why-list">
+      <li>Industry-ready skills</li>
+      <li>Hands-on learning</li>
+      <li>Supportive community</li>
+    </ul>
+    <div class="btn-group">
+      <a href="#" class="cta-btn">🔍 Learn More</a>
+    </div>
+  </section>
+
+  <!-- ── GAMES SECTION ── -->
+  <section class="games-section">
+    <h2>GAMES</h2>
+    <div class="games-banner">
+      <span class="arrow left" id="prevBtn">←</span>
+      <div class="game-icons" id="gameTrack">
+        <div class="game-item"><img src="game1.jpg" alt="Mobile Legends" class="game-icon"><p class="game-label">Mobile Legends</p></div>
+        <div class="game-item"><img src="game2.jpg" alt="Clash of Clans" class="game-icon"><p class="game-label">Clash of Clans</p></div>
+        <div class="game-item"><img src="game3.jpg" alt="Call of Duty" class="game-icon"><p class="game-label">Call of Duty</p></div>
+        <div class="game-item"><img src="game4.jpg" alt="Subway Surfers" class="game-icon"><p class="game-label">Subway Surfers</p></div>
+        <div class="game-item"><img src="game5.jpg" alt="Chess" class="game-icon"><p class="game-label">Chess</p></div>
+        <div class="game-item"><img src="game6.jpg" alt="Dragon City" class="game-icon"><p class="game-label">Dragon City</p></div>
+        <div class="game-item"><img src="game7.jpg" alt="Block Blast" class="game-icon"><p class="game-label">Block Blast</p></div>
+      </div>
+      <span class="arrow right" id="nextBtn">→</span>
+    </div>
+  </section>
+
+  <!-- ── CREATORS SECTION ── -->
+  <section class="creators-section">
+    <div class="creators-left">
+      <h2>From Students to Game Creators</h2>
+      <p>Our students build real projects, join competitions, and showcase their creativity.</p>
+    </div>
+    <div class="creators-right">
+      <img src="vid1.gif" alt="Student Projects">
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <section class="cic-page">
+
+    <!-- LEFT: logo + school name + social + copyright -->
+    <div class="cic-left">
+      <div class="cic-seal"></div>
+      <div class="cic-school-name">College of the Immaculate Conception</div>
+      <div class="cic-social">
+        <a href="#" class="fb-pill">f</a>
+        <a href="#" class="yt-pill">▶</a>
+      </div>
+      <p class="cic-copy">© All rights Reserved 2023</p>
+    </div>
+
+    <!-- vertical divider -->
+    <div class="cic-divider"></div>
+
+    <!-- RIGHT: top address + horizontal line + bottom links + button -->
+    <div class="cic-right">
+      <div class="cic-right-top">
+        <h2>College of the Immaculate Conception</h2>
+        <p>J. Ilano Street, Maharlika Highway,<br>Cabanatuan City, Nueva Ecija,<br>Philippines 3100</p>
+      </div>
+      <div class="cic-h-divider"></div>
+      <div class="cic-right-bottom">
+        <ul class="cic-links">
+          <li><a href="#">Maps &amp; Location</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Directory</a></li>
+          <li><a href="#">Jobs</a></li>
+          <li><a href="#">Visit</a></li>
+        </ul>
+        <button class="cic-btn">Contact Us</button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── CAROUSEL JS ── -->
+  <script>
+    const track   = document.getElementById('gameTrack');
+    const items   = Array.from(track.querySelectorAll('.game-item'));
+    let visible   = getVisible();
+    let start     = 0;
+
+    function getVisible() {
+      return window.innerWidth <= 420 ? 3 : window.innerWidth <= 768 ? 3 : 5;
+    }
+
+    function render() {
+      visible = getVisible();
+      items.forEach((el, i) => {
+        el.style.display = (i >= start && i < start + visible) ? 'flex' : 'none';
+      });
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      if (start + visible < items.length) { start++; render(); }
+    });
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      if (start > 0) { start--; render(); }
+    });
+
+    window.addEventListener('resize', render);
+    render();
+  </script>
+</body>
+</html>
